@@ -1,0 +1,23 @@
+{
+  "name": "directory-template",
+  "version": "0.0.0",
+  "description": "Allows you to treat a directory like a template and compile it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nickmanning214/directory-template.git"
+  },
+  "keywords": [
+    "directory",
+    "template"
+  ],
+  "author": "Nick Manning",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickmanning214/directory-template/issues"
+  },
+  "homepage": "https://github.com/nickmanning214/directory-template#readme"
+}
