@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/nickmanning214/directory-template/issues"
   },
-  "homepage": "https://github.com/nickmanning214/directory-template#readme"
+  "homepage": "https://github.com/nickmanning214/directory-template#readme",
+  "devDependencies": {
+    "mocha": "^7.1.1"
+  }
 }
