@@ -71,7 +71,7 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
        
         return replaceName({
             files:pathNames.filter(path=>{
-                return path.match(/{[a-z]+}/g)
+                return path.match(/{[a-z\-]+}/g)//lowercase letters and hyphen
             }).sort(sortByNumberOfSlashesDesc),
             from:new RegExp(`{${key}}`,'g'),
             to:renderObj[key]
