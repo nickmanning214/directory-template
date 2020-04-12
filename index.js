@@ -59,7 +59,6 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
     await Promise.all(Object.keys(renderObj).map(key=>{
 
         const regex = new RegExp(`{${key}}`,'g');
-        console.log(regex);
 
         return replace({
             files,
