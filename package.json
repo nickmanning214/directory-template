@@ -4,7 +4,7 @@
   "description": "Allows you to treat a directory like a template and compile it.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "./node_modules/mocha/bin/mocha test/test.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,14 @@
   },
   "homepage": "https://github.com/nickmanning214/directory-template#readme",
   "devDependencies": {
-    "mocha": "^7.1.1"
+    "mocha": "^7.1.1",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@nickmanning214/dir-same": "0.0.4",
+    "@nickmanning214/walk-tree": "0.0.2",
+    "ncp": "^2.0.0",
+    "replace-in-file": "^5.0.2",
+    "walk-sync": "^2.0.2"
   }
 }
