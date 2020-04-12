@@ -24,6 +24,21 @@ function copyDirectory(compileFromParentPath,compileFromDirName,destinationParen
     })
 }
 
+function replaceName(obj){
+    return new Promise((resolve,reject)=>{
+        Promise.all(obj.files.map(path=>{
+            return new Promise((resolve,reject)=>{
+
+                
+
+                fs.rename(path,path.replace(obj.from,obj.to),(err)=>{
+                    if (err) reject(err);
+                    resolve();
+                })
+            })
+        })).then(resolve).catch(err=>reject(err))
+    })
+}
 
 const walkDir = require('@nickmanning214/walk-tree/implementations/walkDirectory.js');
 module.exports = async function(compileFromParentPath,compileFromDirName,destinationParentPath,destinationDirName,renderObj){
@@ -36,31 +51,33 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
         return stats.isFile();
     });
     
-    console.log(pathNames,files);
     
 
     
 
-    //Why do I need "await" here?
-    let replacePromise = replace({
-        files,
-        from:/{color}/g,
-        to:'red'
-    });
+   
+    await Promise.all(Object.keys(renderObj).map(key=>{
 
-    await replacePromise;
+        const regex = new RegExp(`{${key}}`,'g');
+        console.log(regex);
 
-    const replacables = pathNames.filter(path=>{
-        return path.match(/{[a-z]+}/g)
-    }).sort(sortByNumberOfSlashesDesc);//todo what if a file name has an escaped slash
-    
-    await Promise.all([...replacables.map(path=>{
-        return new Promise((resolve,reject)=>{
-            fs.rename(path,path.replace(/{name}/g,'hello'),(err)=>{
-                if (err) reject(err);
-                resolve();
-            })
-        })
-    })]);
+        return replace({
+            files,
+            from:new RegExp(`{${key}}`,'g'),
+            to:renderObj[key]
+        });
+    }));
+
+    await Promise.all(Object.keys(renderObj).map(key=>{
+       
+        return replaceName({
+            files:pathNames.filter(path=>{
+                return path.match(/{[a-z]+}/g)
+            }).sort(sortByNumberOfSlashesDesc),
+            from:new RegExp(`{${key}}`,'g'),
+            to:renderObj[key]
+        });
+    }));
+
 
 }
