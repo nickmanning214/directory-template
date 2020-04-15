@@ -67,6 +67,8 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
         });
     }));
 
+    //you have to loop through files, not keys. Reason: file names will change during this.
+    /*
     await Promise.all(Object.keys(renderObj).map(key=>{
        
         return replaceName({
@@ -77,6 +79,23 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
             to:renderObj[key]
         });
     }));
+    */
 
+    const pathsForFileNameReplace = pathNames.filter(path=>{
+        return path.match(/{[a-z\-]+}/g)//lowercase letters and hyphen
+    }).sort(sortByNumberOfSlashesDesc);
+
+    await Promise.all(pathsForFileNameReplace.map(path=>{
+        return new Promise((resolve,reject)=>{
+            Promise.all(Object.keys(renderObj).map(key=>{
+                return replaceName({
+                    files:[path],
+                    from:new RegExp(`{${key}}`,'g'),
+                    to:renderObj[key]
+                })
+            })).then(resolve).catch(reject);
+            
+        })
+    }))
 
 }

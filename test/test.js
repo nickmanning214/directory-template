@@ -69,6 +69,7 @@ describe('single-file-name', function() {
 
 });
 
+/*
 const projectName = ''
 const svelteRenderObj = {
     'component-name':titleCase(projectName).replace(/ /g,''),
@@ -100,3 +101,4 @@ describe('svelte-create-project', function() {
 
 });
 
+*/
