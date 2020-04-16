@@ -4,10 +4,26 @@ var path = require('path');
 const renderDirectory = require('../index.js');
 const rimraf = require('rimraf');
 
-const singleFileDir = path.join(__dirname,'single-file');
-const singleFileDeeperDir = path.join(__dirname,'single-file-deeper');
-const singleFileName = path.join(__dirname,'single-file-name');
-const twoBarsOneFileDir = path.join(__dirname,'two-vars-one-file');
+const singleFileDir = {
+    dir:path.join(__dirname,'single-file'),
+    toCompile:path.join(__dirname,'single-file','to-compile'),
+    compiled:path.join(__dirname,'single-file','compiled')
+}
+const singleFileDeeperDir = {
+    dir:path.join(__dirname,'single-file-deeper'),
+    toCompile:path.join(__dirname,'single-file-deeper','to-compile'),
+    compiled:path.join(__dirname,'single-file-deeper','compiled')
+}
+const singleFileName = {
+    dir:path.join(__dirname,'single-file-name'),
+    toCompile:path.join(__dirname,'single-file-name','to-compile'),
+    compiled:path.join(__dirname,'single-file-name','compiled')
+}
+const twoBarsOneFileDir = {
+    dir:path.join(__dirname,'two-vars-one-file'),
+    toCompile:path.join(__dirname,'two-vars-one-file','to-compile'),
+    compiled:path.join(__dirname,'two-vars-one-file','compiled')
+}
 
 const svelteCreateProject = path.join(__dirname,'svelte-create-project');
 
@@ -18,55 +34,56 @@ const renderObj = {
 
 describe('single-file', function() {
     before(async function() {
-        await renderDirectory(singleFileDir,'to-compile',singleFileDir,'compiled',renderObj);
+        await renderDirectory(singleFileDir.toCompile,singleFileDir.compiled,renderObj);
     });
     it('should be identical to the other directory', function(done) {
 
         //temp setTimeout to see if it's an async problem.
-            const same = dirSame(singleFileDir,'compiled',singleFileDir,'compiled-prototype');
+            const same = dirSame(singleFileDir.dir,'compiled',singleFileDir.dir,'compiled-prototype');
             assert.ok(same);
             done();
     });
     after(function(done){
         //You have to clean up the created directory. It doesn't work to recreate it over the last one.
-        rimraf(path.join(singleFileDir,'compiled'),done)
+        rimraf(singleFileDir.compiled,done)
     });
 });
 
 describe('single-file-deeper', function() {
     before(async function() {
-        await renderDirectory(singleFileDeeperDir,'to-compile',singleFileDeeperDir,'compiled',renderObj);
+        await renderDirectory(singleFileDeeperDir.toCompile,singleFileDeeperDir.compiled,renderObj);
+
     });
     it('should be identical to the other directory', function(done) {
 
         //temp setTimeout to see if it's an async problem.
-            const same = dirSame(singleFileDeeperDir,'compiled',singleFileDeeperDir,'compiled-prototype');
+            const same = dirSame(singleFileDeeperDir.dir,'compiled',singleFileDeeperDir.dir,'compiled-prototype');
             assert.ok(same);
             done();
     });
 
     after(function(done){
         //You have to clean up the created directory. It doesn't work to recreate it over the last one.
-        rimraf(path.join(singleFileDeeperDir,'compiled'),done)
+        rimraf(singleFileDeeperDir.compiled,done)
     })
 
 });
 
 describe('single-file-name', function() {
     before(async function() {
-        await renderDirectory(singleFileName,'to-compile',singleFileName,'compiled',renderObj);
+        await renderDirectory(singleFileName.toCompile,singleFileName.compiled,renderObj);
     });
     it('should be identical to the other directory', function(done) {
 
         //temp setTimeout to see if it's an async problem.
-            const same = dirSame(singleFileName,'compiled',singleFileName,'compiled-prototype');
+            const same = dirSame(singleFileName.dir,'compiled',singleFileName.dir,'compiled-prototype');
             assert.ok(same);
             done();
     });
 
     after(function(done){
         //You have to clean up the created directory. It doesn't work to recreate it over the last one.
-        rimraf(path.join(singleFileName,'compiled'),done)
+        rimraf(singleFileName.compiled,done)
     })
 
 });
@@ -74,20 +91,20 @@ describe('single-file-name', function() {
 describe('two-vars-one-file', function() {
     before(async function() {
 
-        await renderDirectory(twoBarsOneFileDir,'to-compile',twoBarsOneFileDir,'compiled',renderObj);
+        await renderDirectory(twoBarsOneFileDir.toCompile,twoBarsOneFileDir.compiled,renderObj);
 
     });
     it('should be identical to the other directory', function(done) {
 
         //temp setTimeout to see if it's an async problem.
-            const same = dirSame(twoBarsOneFileDir,'compiled',twoBarsOneFileDir,'compiled-prototype');
+            const same = dirSame(twoBarsOneFileDir.dir,'compiled',twoBarsOneFileDir.dir,'compiled-prototype');
             assert.ok(same);
             done();
     });
 
     after(function(done){
         //You have to clean up the created directory. It doesn't work to recreate it over the last one.
-        rimraf(path.join(twoBarsOneFileDir,'compiled'),done)
+        rimraf(twoBarsOneFileDir.compiled,done)
     })
 
 });

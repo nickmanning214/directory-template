@@ -13,9 +13,9 @@ const ncp = require('ncp').ncp;
 const path = require('path');
 const replaceInFile = require('replace-in-file');
 
-function copyDirectory(compileFromParentPath,compileFromDirName,destinationParentPath,destinationDirName){
+function copyDirectory(fromPath,toPath){
     return new Promise((resolve,reject)=>{
-        ncp(path.join(compileFromParentPath,compileFromDirName),path.join(destinationParentPath,destinationDirName),function(err){
+        ncp(fromPath,toPath,function(err){
             if (err){
                 reject(err)
             }
@@ -41,11 +41,12 @@ function replaceName(obj){
 }
 
 const walkDir = require('@nickmanning214/walk-tree/implementations/walkDirectory.js');
-module.exports = async function(compileFromParentPath,compileFromDirName,destinationParentPath,destinationDirName,renderObj){
+module.exports = async function(fromPath,toPath,renderObj){
     
-    await copyDirectory(compileFromParentPath,compileFromDirName,destinationParentPath,destinationDirName);
-    
-    const pathNames = walkDir(destinationParentPath,destinationDirName).map(node=>`${node.metaData.parentPath}/${node.value}`);
+    await copyDirectory(fromPath,toPath);
+
+
+    const pathNames = walkDir(path.join(toPath,'..'),path.parse(toPath).base).map(node=>`${node.metaData.parentPath}/${node.value}`);
     const files = pathNames.filter(path=>{
         const stats = fs.lstatSync(path);
         return stats.isFile();
