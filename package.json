@@ -1,6 +1,6 @@
 {
   "name": "@nickmanning214/directory-template",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Allows you to treat a directory like a template and compile it.",
   "main": "index.js",
   "scripts": {
