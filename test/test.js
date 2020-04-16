@@ -7,6 +7,8 @@ const rimraf = require('rimraf');
 const singleFileDir = path.join(__dirname,'single-file');
 const singleFileDeeperDir = path.join(__dirname,'single-file-deeper');
 const singleFileName = path.join(__dirname,'single-file-name');
+const twoBarsOneFileDir = path.join(__dirname,'two-vars-one-file');
+
 const svelteCreateProject = path.join(__dirname,'svelte-create-project');
 
 const renderObj = {
@@ -68,6 +70,28 @@ describe('single-file-name', function() {
     })
 
 });
+
+describe('two-vars-one-file', function() {
+    before(async function() {
+
+        await renderDirectory(twoBarsOneFileDir,'to-compile',twoBarsOneFileDir,'compiled',renderObj);
+
+    });
+    it('should be identical to the other directory', function(done) {
+
+        //temp setTimeout to see if it's an async problem.
+            const same = dirSame(twoBarsOneFileDir,'compiled',twoBarsOneFileDir,'compiled-prototype');
+            assert.ok(same);
+            done();
+    });
+
+    after(function(done){
+        //You have to clean up the created directory. It doesn't work to recreate it over the last one.
+        rimraf(path.join(twoBarsOneFileDir,'compiled'),done)
+    })
+
+});
+
 
 /*
 const projectName = ''

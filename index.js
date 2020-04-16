@@ -11,7 +11,7 @@ String.prototype.count=function(c) {
 const fs = require('fs');
 const ncp = require('ncp').ncp;
 const path = require('path');
-const replace = require('replace-in-file');
+const replaceInFile = require('replace-in-file');
 
 function copyDirectory(compileFromParentPath,compileFromDirName,destinationParentPath,destinationDirName){
     return new Promise((resolve,reject)=>{
@@ -54,13 +54,13 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
     
 
     
-
+    //Doing it this way won't work with multiple variables in same file.
    
     await Promise.all(Object.keys(renderObj).map(key=>{
 
         const regex = new RegExp(`{${key}}`,'g');
 
-        return replace({
+        return replaceInFile.sync({
             files,
             from:new RegExp(`{${key}}`,'g'),
             to:renderObj[key]
@@ -81,10 +81,34 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
     }));
     */
 
+
+//same problem with this.
+
+    
     const pathsForFileNameReplace = pathNames.filter(path=>{
         return path.match(/{[a-z\-]+}/g)//lowercase letters and hyphen
     }).sort(sortByNumberOfSlashesDesc);
 
+    const newNames = pathsForFileNameReplace.reduce((aggregator,pathName)=>{
+        aggregator[pathName] = Object.keys(renderObj).reduce((currentPath,key)=>{
+            currentPath = currentPath.replace(new RegExp(`{${key}}`,'g'),renderObj[key])
+            return currentPath;
+        },pathName);
+        return aggregator;
+    },{});
+
+    await Promise.all(Object.keys(newNames).map(oldName=>{
+        const newName = newNames[oldName];
+        return new Promise((resolve,reject)=>{
+            fs.rename(oldName,newName,(err)=>{
+                if (err) reject(err);
+                resolve();
+            })
+        })
+    }));
+    
+
+    /*
     await Promise.all(pathsForFileNameReplace.map(path=>{
         return new Promise((resolve,reject)=>{
             Promise.all(Object.keys(renderObj).map(key=>{
@@ -96,6 +120,6 @@ module.exports = async function(compileFromParentPath,compileFromDirName,destina
             })).then(resolve).catch(reject);
             
         })
-    }))
+    }))*/
 
 }
